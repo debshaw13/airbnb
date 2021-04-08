@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   get '/property/:id' => 'static_pages#property'
   get '/login' => 'static_pages#login'
+  get '/test' => 'static_pages#test'
 
   namespace :api do
     # Add routes below this line
@@ -15,6 +16,8 @@ Rails.application.routes.draw do
     get '/properties/:id/bookings' => 'bookings#get_property_bookings'
     get '/authenticated' => 'sessions#authenticated'
 
+    # stripe webhook
+    post '/charges/mark_complete' => 'charges#mark_complete'
   end
 
 end

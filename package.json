@@ -10,7 +10,9 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dates": "^21.8.0",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-select": "^4.3.0",
+    "react-select-country-list": "^2.2.3"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.7.1"
