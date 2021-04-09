@@ -4,7 +4,13 @@ import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { safeCredentials, handleErrors } from '@utils/fetchHelper';
 import Select from 'react-select'
-import countryList from 'react-select-country-list'
+import CountrySelector from './countrySelector';
+
+const property_list = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+]
 
 class Test extends React.Component {
   constructor(props) {
@@ -27,6 +33,7 @@ class Test extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   componentDidMount() {
@@ -46,14 +53,23 @@ class Test extends React.Component {
     })
   }
 
+  handleSelectChange = (value, action) => {
+    this.setState({
+      [action.name]: value
+    })
+  }
+
   render () {
+
     const { authenticated, user, title, description, city, country, property_type, price_per_night, max_guests, bedrooms, beds, baths, image } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <input type="text" name="title" className="" placeholder="Title" value={title} onChange={this.handleChange} required /> 
         <input type="textarea" name="description" className="" placeholder="Description" value={description} onChange={this.handleChange} required />
         <input type="text" name="city" className="" placeholder="City" value={city} onChange={this.handleChange} required />
-        <select name="country" className="" value="USA" onChange={this.handleChange} required />
+        <CountrySelector name="country" value={country} onChange={this.handleSelectChange} required />
+        <Select name="property_type" options={property_list} value={property_type} onChange={this.handleSelectChange} required />
         <input type="submit" value="Submit" />
       </form>
     )
