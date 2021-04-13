@@ -46,3 +46,11 @@ export function handleErrors(response) {
   }
   return response.json();
 }
+
+export function safeCredentialsForm(options = {}) {
+  return Object.assign(options, {
+    credentials: 'include',
+    mode: 'same-origin',
+    headers: Object.assign((options.headers || {}), authenticityHeader()),
+  });
+}

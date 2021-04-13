@@ -3,13 +3,14 @@ Rails.application.routes.draw do
 
   get '/property/:id' => 'static_pages#property'
   get '/login' => 'static_pages#login'
-  get '/test' => 'static_pages#test'
+  get '/properties/new' => 'static_pages#new'
+  get '/properties/:id/edit' => 'static_pages#edit'
 
   namespace :api do
     # Add routes below this line
     resources :users, only: [:create]
     resources :sessions, only: [:create, :destroy]
-    resources :properties, only: [:index, :show]
+    resources :properties, only: [:index, :show, :create, :update]
     resources :bookings, only: [:create]
     resources :charges, only: [:create]
 

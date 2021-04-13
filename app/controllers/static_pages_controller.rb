@@ -11,4 +11,13 @@ class StaticPagesController < ApplicationController
   def login
     render 'login'
   end
+
+  def new
+    render 'property_form'
+  end
+  
+  def edit
+    @data = { property_id: params[:id] }.to_json
+    render 'property_form'
+  end
 end
