@@ -45,8 +45,10 @@ class Property extends React.Component {
       user,
     } = property
 
+    console.log(id);
+
     return (
-      <Layout>
+      <Layout property_id={id} >
         <div className="property-image mb-3" style={{ backgroundImage: `url(${image_url})` }} />
         <div className="container">
           <div className="row">

@@ -1,6 +1,6 @@
 module Api
   class PropertiesController < ApplicationController
-    before_action :session_exists, only: [:create, :update]
+    # before_action :session_exists, only: [:create, :update]
     before_action :property_exists, only: [:show, :update]
 
     def index
@@ -15,6 +15,10 @@ module Api
     end
 
     def create
+      token = cookies.signed[:airbnb_session_token]
+      session = Session.find_by(token: token)
+      return render json: { error: 'user not logged in' }, status: :unauthorized if !session
+
       @property = session.user.properties.create(property_params)
         if @property.save
           render 'api/properties/show', status: :created
@@ -24,6 +28,10 @@ module Api
     end
 
     def update
+      token = cookies.signed[:airbnb_session_token]
+      session = Session.find_by(token: token)
+      return render json: { error: 'user not logged in' }, status: :unauthorized if !session
+      
       @property = session.user.properties.update(property_params)
         if @property.save
           render 'api/properties/show', status: :created
@@ -39,11 +47,11 @@ module Api
           :price_per_night, :max_guests, :bedrooms, :beds, :baths, images: [])
       end
 
-      def session_exists
-        token = cookies.signed[:airbnb_session_token]
-        session = Session.find_by(token: token)
-        return render json: { error: 'user not logged in' }, status: :unauthorized if !session
-      end
+      # def session_exists
+      #   token = cookies.signed[:airbnb_session_token]
+      #   session = Session.find_by(token: token)
+      #   return render json: { error: 'user not logged in' }, status: :unauthorized if !session
+      # end
 
       def property_exists
         @property = Property.find_by(id: params[:id])

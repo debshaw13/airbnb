@@ -34,7 +34,9 @@ class New extends React.Component {
 
   componentDidMount() {
     this.checkAuthenticated();
-    this.fetchProperty();
+    if ( this.props.property_id) {
+      this.fetchProperty();  
+    }
   }
 
   checkAuthenticated() {
@@ -124,7 +126,9 @@ class New extends React.Component {
   render () {
 
     const { authenticated, id, user, title, description, city, country, property_type, price_per_night, max_guests, bedrooms, beds, baths, images } = this.state;
-    
+
+console.log(property_type);
+
     if(!id) {     
       return (
 
@@ -145,10 +149,10 @@ class New extends React.Component {
                 <input type="text" name="city" className="form-control" placeholder="City" value={city} onChange={this.handleChange} required />
               </div>
               <div className="col-12 my-2">
-                <CountrySelector name="country" value={country.label} onChange={this.handleSelectChange} required />
+                <CountrySelector name="country" value={country} onChange={this.handleSelectChange} required />
               </div>
               <div className="col-12 my-2">
-                <Select name="property_type" options={property_list} value={property_type.label} onChange={this.handleSelectChange} required />
+                <Select name="property_type" options={property_list} value={property_list.filter(option => option.label === property_type)} onChange={this.handleSelectChange} required />
               </div>
               <div className="col-12 my-2">
                 <input type="number" name="price_per_night" className="form-control" placeholder="Price Per Night" value={price_per_night} onChange={this.handleChange} required /> 
@@ -195,10 +199,10 @@ class New extends React.Component {
               <input type="text" name="city" className="form-control" placeholder="City" value={city} onChange={this.handleChange} required />
             </div>
             <div className="col-12 my-2">
-              <CountrySelector name="country" value={country.label} onChange={this.handleSelectChange} required />
+              <CountrySelector name="country" value={country} onChange={this.handleSelectChange} required />
             </div>
             <div className="col-12 my-2">
-              <Select name="property_type" options={property_list} value={property_type.label} onChange={this.handleSelectChange} required />
+              <Select name="property_type" options={property_list} value={property_list.filter(option => option.label === property_type)} onChange={this.handleSelectChange} required />
             </div>
             <div className="col-12 my-2">
               <input type="number" name="price_per_night" className="form-control" placeholder="Price Per Night" value={price_per_night} onChange={this.handleChange} required /> 

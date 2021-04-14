@@ -11,6 +11,14 @@ const Layout = (props) => {
             <li className="nav-item">
               <a className="nav-link" href="/">Home</a>
             </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/properties/new">Create a Property</a>
+            </li>
+            { props.property_id &&
+              <li className="nav-item">
+                <a className="nav-link" href={"/properties/" + props.property_id + "/edit"}>Edit Property</a>
+              </li>
+            }
           </ul>
         </div>
       </nav>

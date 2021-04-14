@@ -47,7 +47,7 @@ class EditProperty extends React.Component {
   }
 
   fetchProperty() {
-    fetch(`/api/properties/${this.props.property_id}`)
+    fetch(`/api/properties/${props.property_id}`)
       .then(handleErrors)
       .then(data => {
         this.setState({
@@ -122,7 +122,7 @@ class EditProperty extends React.Component {
 
   render () {
 
-    const { authenticated, user, title, description, city, country, property_type, price_per_night, max_guests, bedrooms, beds, baths, images } = this.state;
+    const { authenticated, id, user, title, description, city, country, property_type, price_per_night, max_guests, bedrooms, beds, baths, images } = this.state;
 
     return (
       <div className="container">
@@ -142,10 +142,10 @@ class EditProperty extends React.Component {
               <input type="text" name="city" className="form-control" placeholder="City" value={city} onChange={this.handleChange} required />
             </div>
             <div className="col-12 my-2">
-              <CountrySelector name="country" value={country.label} onChange={this.handleSelectChange} required />
+              <CountrySelector name="country" value={country} onChange={this.handleSelectChange} required />
             </div>
             <div className="col-12 my-2">
-              <Select name="property_type" options={property_list} value={property_type.label} onChange={this.handleSelectChange} required />
+              <Select name="property_type" options={property_list} value={property_list.filter(option => option.label === property_type)} onChange={this.handleSelectChange} required />
             </div>
             <div className="col-12 my-2">
               <input type="number" name="price_per_night" className="form-control" placeholder="Price Per Night" value={price_per_night} onChange={this.handleChange} required /> 
