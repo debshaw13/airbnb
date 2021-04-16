@@ -20,4 +20,9 @@ class StaticPagesController < ApplicationController
     @data = { property_id: params[:id] }.to_json
     render 'property_form'
   end
+
+  def bookings
+    @data = { property_id: params[:id] }.to_json
+    render 'bookings'
+  end
 end

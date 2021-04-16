@@ -14,9 +14,14 @@ const Layout = (props) => {
             <li className="nav-item">
               <a className="nav-link" href="/properties/new">Create a Property</a>
             </li>
-            { props.property_id &&
+            { props.session_user && props.session_user === props.property_user &&
               <li className="nav-item">
                 <a className="nav-link" href={"/properties/" + props.property_id + "/edit"}>Edit Property</a>
+              </li>
+            }
+            { props.session_user &&
+              <li className="nav-item">
+                <a className="nav-link" href={"/bookings"}>My Bookings</a>
               </li>
             }
           </ul>

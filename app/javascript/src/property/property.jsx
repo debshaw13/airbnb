@@ -3,6 +3,7 @@ import React from 'react';
 import Layout from '@src/layout';
 import BookingWidget from './bookingWidget';
 import { handleErrors } from '@utils/fetchHelper';
+import HostBookings from './hostBookings'
 
 import './property.scss';
 
@@ -10,6 +11,7 @@ class Property extends React.Component {
   state = {
     property: {},
     loading: true,
+    session_user: '',
   }
 
   componentDidMount() {
@@ -21,10 +23,17 @@ class Property extends React.Component {
           loading: false,
         })
       })
+    fetch('/api/authenticated')
+      .then(handleErrors)
+      .then(data => {
+        this.setState({
+          session_user: data.username,
+        })
+      })
   }
 
   render () {
-    const { property, loading } = this.state;
+    const { property, loading, session_user } = this.state;
     if (loading) {
       return <p>loading...</p>;
     };
@@ -45,10 +54,8 @@ class Property extends React.Component {
       user,
     } = property
 
-    console.log(id);
-
     return (
-      <Layout property_id={id} >
+      <Layout property_id={id} property_user={user.username} session_user={session_user}>
         <div className="property-image mb-3" style={{ backgroundImage: `url(${image_url})` }} />
         <div className="container">
           <div className="row">
@@ -73,6 +80,11 @@ class Property extends React.Component {
             <div className="col-12 col-lg-5">
               <BookingWidget property_id={id} price_per_night={price_per_night} />
             </div>
+            { session_user === property.user.username && 
+              <div className="col-12">              
+                <HostBookings />    
+              </div>
+            }
           </div>
         </div>
       </Layout>

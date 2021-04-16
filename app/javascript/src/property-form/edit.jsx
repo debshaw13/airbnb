@@ -125,52 +125,54 @@ class EditProperty extends React.Component {
     const { authenticated, id, user, title, description, city, country, property_type, price_per_night, max_guests, bedrooms, beds, baths, images } = this.state;
 
     return (
-      <div className="container">
-        <div className="row">
-          <h3>Edit a property</h3>
-       </div>
+      <Layout>
+        <div className="container">
+          <div className="row">
+            <h3>Edit property</h3>
+         </div>
 
-        <div className="row">
-          <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
-            <div className="col-12 my-2">
-              <input type="text" name="title" className="form-control" placeholder="Title" value={title} onChange={this.handleChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <input type="textarea" name="description" className="form-control" placeholder="Description" value={description} onChange={this.handleChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <input type="text" name="city" className="form-control" placeholder="City" value={city} onChange={this.handleChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <CountrySelector name="country" value={country} onChange={this.handleSelectChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <Select name="property_type" options={property_list} value={property_list.filter(option => option.label === property_type)} onChange={this.handleSelectChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <input type="number" name="price_per_night" className="form-control" placeholder="Price Per Night" value={price_per_night} onChange={this.handleChange} required /> 
-            </div>
-            <div className="col-12 my-2">
-              <input type="number" name="max_guests" className="form-control" placeholder="Max Guests" value={max_guests} onChange={this.handleChange} required /> 
-            </div>
-            <div className="col-12 my-2">
-              <input type="number" name="bedrooms" className="form-control" placeholder="Bedrooms" value={bedrooms} onChange={this.handleChange} required /> 
-            </div>
-            <div className="col-12 my-2">
-              <input type="number" name="beds" className="form-control" placeholder="Beds" value={beds} onChange={this.handleChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <input type="number" name="baths" className="form-control" placeholder="Baths" value={baths} onChange={this.handleChange} required />
-            </div>
-            <div className="col-12 my-2">
-              <input type="file" name="images" onChange={this.handleChange} id="fileInput" />
-            </div>
-            <div className="col-12 my-4">
-              <input type="submit" className="btn btn-success" value="Submit" />
-            </div>
-          </form>
+          <div className="row">
+            <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
+              <div className="col-12 my-2">
+                <input type="text" name="title" className="form-control" placeholder="Title" value={title} onChange={this.handleChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <input type="textarea" name="description" className="form-control" placeholder="Description" value={description} onChange={this.handleChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <input type="text" name="city" className="form-control" placeholder="City" value={city} onChange={this.handleChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <CountrySelector name="country" value={country} onChange={this.handleSelectChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <Select name="property_type" options={property_list} value={property_list.filter(option => option.label === property_type)} onChange={this.handleSelectChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <input type="number" name="price_per_night" className="form-control" placeholder="Price Per Night" value={price_per_night} onChange={this.handleChange} required /> 
+              </div>
+              <div className="col-12 my-2">
+                <input type="number" name="max_guests" className="form-control" placeholder="Max Guests" value={max_guests} onChange={this.handleChange} required /> 
+              </div>
+              <div className="col-12 my-2">
+                <input type="number" name="bedrooms" className="form-control" placeholder="Bedrooms" value={bedrooms} onChange={this.handleChange} required /> 
+              </div>
+              <div className="col-12 my-2">
+                <input type="number" name="beds" className="form-control" placeholder="Beds" value={beds} onChange={this.handleChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <input type="number" name="baths" className="form-control" placeholder="Baths" value={baths} onChange={this.handleChange} required />
+              </div>
+              <div className="col-12 my-2">
+                <input type="file" name="images" onChange={this.handleChange} id="fileInput" />
+              </div>
+              <div className="col-12 my-4">
+                <input type="submit" className="btn btn-primary" value="Submit" />
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      </Layout>
     )
 
 

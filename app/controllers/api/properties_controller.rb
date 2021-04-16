@@ -1,6 +1,5 @@
 module Api
   class PropertiesController < ApplicationController
-    # before_action :session_exists, only: [:create, :update]
     before_action :property_exists, only: [:show, :update]
 
     def index
@@ -40,18 +39,45 @@ module Api
         end
     end
 
+    def bookings
+      token = cookies.signed[:airbnb_session_token]
+      session = Session.find_by(token: token)
+      return render json: { error: 'user not logged in' }, status: :unauthorized if !session
+
+      property =  Property.find_by(id: params[:id])
+      return render json: { error: 'cannot find property' }, status: :not_found if !property
+
+      @bookings = property.bookings.where("end_date > ? ", Date.today)
+      render 'api/bookings/index'
+    end
+
+    def guest_bookings
+      token = cookies.signed[:airbnb_session_token]
+      session = Session.find_by(token: token)
+      return render json: { error: 'user not logged in' }, status: :unauthorized if !session
+
+      @bookings = session.user.bookings.where("end_date > ? ", Date.today)
+      render 'api/bookings/guest_index'
+    end
+
+    def host_bookings
+      token = cookies.signed[:airbnb_session_token]
+      session = Session.find_by(token: token)
+      return render json: { error: 'user not logged in' }, status: :unauthorized if !session
+
+      property =  session.user.properties.find(params[:id])
+      return render json: { error: 'cannot find property' }, status: :not_found if !property
+
+      @bookings = property.bookings.where("end_date > ? ", Date.today)
+      render 'api/bookings/host_index'
+    end
+
     private
 
       def property_params
         params.require(:property).permit(:title, :description, :city, :country, :property_type, 
           :price_per_night, :max_guests, :bedrooms, :beds, :baths, images: [])
       end
-
-      # def session_exists
-      #   token = cookies.signed[:airbnb_session_token]
-      #   session = Session.find_by(token: token)
-      #   return render json: { error: 'user not logged in' }, status: :unauthorized if !session
-      # end
 
       def property_exists
         @property = Property.find_by(id: params[:id])

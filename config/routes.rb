@@ -5,16 +5,24 @@ Rails.application.routes.draw do
   get '/login' => 'static_pages#login'
   get '/properties/new' => 'static_pages#new'
   get '/properties/:id/edit' => 'static_pages#edit'
+  get '/bookings' => 'static_pages#bookings'
 
   namespace :api do
     # Add routes below this line
     resources :users, only: [:create]
     resources :sessions, only: [:create, :destroy]
-    resources :properties, only: [:index, :show, :create, :update]
+    resources :properties, only: [:index, :show, :create, :update] do
+      member do
+        get :bookings
+        get :host_bookings
+      end
+      collection do
+        get :guest_bookings
+      end
+    end
     resources :bookings, only: [:create]
     resources :charges, only: [:create]
 
-    get '/properties/:id/bookings' => 'bookings#get_property_bookings'
     get '/authenticated' => 'sessions#authenticated'
 
     # stripe webhook
