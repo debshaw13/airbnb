@@ -12,6 +12,7 @@ class Bookings extends React.Component {
       bookings: [],
     }
 
+    this.initiateStripeCheckout = this.initiateStripeCheckout.bind(this);
   }
 
   componentDidMount() {
@@ -24,23 +25,32 @@ class Bookings extends React.Component {
     })
   }
 
+  initiateStripeCheckout = (booking_id) => {
+    return fetch(`/api/charges?booking_id=${booking_id}&cancel_url=${window.location.pathname}`, safeCredentials({
+      method: 'POST',
+    }))
+      .then(handleErrors)
+      .then(response => {
+        const stripe = Stripe('pk_test_xurXA5P3oHIpjdDaLO0RajsJ');
+
+        stripe.redirectToCheckout({
+          // Make the id field from the Checkout Session creation API response
+          // available to this file, so you can provide it as parameter here
+          // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+          sessionId: response.charge.checkout_session_id,
+        }).then((result) => {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer
+          // using `result.error.message`.
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
   render () {
   	const { bookings } = this.state
-
-  	const {
-      id,
-      title,
-      start_date,
-      end_date,
-    } = bookings
-
-	const firstBooking = Array.isArray(bookings) && bookings.length ? bookings[0] : {};
-
-	const headers = Object.keys(firstBooking);
-
-	console.log(firstBooking);
-
-	const paymentButton = <button className="btn btn-primary">Pay Now</button>;
 
     return (
       <Layout>
@@ -53,12 +63,17 @@ class Bookings extends React.Component {
 		      <table className="table">
 		      	<thead className="thead-dark">
 		          <tr>
-		            { headers.map(header => <th key={header}>{header}</th>) }
+                <th>Property</th><th>Start</th><th>End</th><th>Paid?</th>
 		          </tr>
 		        </thead>
 		        <tbody>
 			        { bookings.map((booking, index) => {
-			          return <tr key={"br-" + index}>{ headers.map( header => <td key={"bc-" + index + booking[header]}>{(header === "Paid?") ? (booking[header] ? "Paid" : paymentButton) : booking[header]}</td>) }</tr>
+			          return(<tr key={"br-" + index}>
+                  <td>{booking["Property"]}</td>
+                  <td>{booking["Start"]}</td>
+                  <td>{booking["End"]}</td>
+                  <td>{booking["Paid?"] ? "Paid" : <button onClick={(e) => this.initiateStripeCheckout(booking["Id"])} className="btn btn-primary">Pay Now</button>}</td>
+                </tr>)
 			        }) }
 		        </tbody>
 		      </table>
