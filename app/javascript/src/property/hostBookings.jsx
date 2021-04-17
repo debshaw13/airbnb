@@ -15,13 +15,12 @@ class HostBookings extends React.Component {
   }
 
   componentDidMount() {
-  	fetch(`/api/properties/67/host_bookings`)
+  	fetch(`/api/properties/${this.props.propertyId}/host_bookings`)
      .then(handleErrors)
      .then(data => {
        this.setState({
          bookings: data.bookings,
        })
-       console.log(data);
     })
   }
 
@@ -39,29 +38,36 @@ class HostBookings extends React.Component {
 
 	const headers = Object.keys(firstBooking);
 
-	console.log(firstBooking);
+    if (bookings.length) {
+      return (
+  	    <div className="container">
+  	      <div className="row my-2">
+  	        <h3>Upcoming Bookings</h3>
+  	      </div>
 
+  	      <div className="row my-2">
+  		      <table className="table">
+  		      	<thead className="thead-dark">
+  		          <tr>
+  		            { headers.map(header => <th key={header}>{header}</th>) }
+  		          </tr>
+  		        </thead>
+  		        <tbody>
+  			        { bookings.map((booking, index) => {
+  			          return <tr key={"br-" + index}>{ headers.map( header => <td key={"bc-" + index + booking[header]}>{(header === "Paid?") ? (booking[header] ? "Paid" : "Not Paid") : booking[header]}</td>) }</tr>
+  			        }) }
+  		        </tbody>
+  		      </table>
+  	      </div>
+  	    </div>
+      )
+    }
     return (
-	    <div className="container">
-	      <div className="row my-2">
-	        <h3>Upcoming Bookings</h3>
-	      </div>
-
-	      <div className="row my-2">
-		      <table className="table">
-		      	<thead className="thead-dark">
-		          <tr>
-		            { headers.map(header => <th key={header}>{header}</th>) }
-		          </tr>
-		        </thead>
-		        <tbody>
-			        { bookings.map((booking, index) => {
-			          return <tr key={"br-" + index}>{ headers.map( header => <td key={"bc-" + index + booking[header]}>{(header === "Paid?") ? (booking[header] ? "Paid" : "Not Paid") : booking[header]}</td>) }</tr>
-			        }) }
-		        </tbody>
-		      </table>
-	      </div>
-	    </div>
+      <div className="container">
+        <div className="row my-2">
+          <h3>No Upcoming Bookings</h3>
+        </div>
+      </div>
     )
   }
 }

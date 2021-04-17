@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/properties/new' => 'static_pages#new'
   get '/properties/:id/edit' => 'static_pages#edit'
   get '/bookings' => 'static_pages#bookings'
+  get '/booking/:id/success' => 'static_pages#success'
 
   namespace :api do
     # Add routes below this line
@@ -20,7 +21,7 @@ Rails.application.routes.draw do
         get :guest_bookings
       end
     end
-    resources :bookings, only: [:create]
+    resources :bookings, only: [:create, :show]
     resources :charges, only: [:create]
 
     get '/authenticated' => 'sessions#authenticated'

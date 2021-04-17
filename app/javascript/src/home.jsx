@@ -12,6 +12,7 @@ class Home extends React.Component {
     total_pages: null,
     next_page: null,
     loading: true,
+    session_user: '',
   }
 
   componentDidMount() {
@@ -23,6 +24,13 @@ class Home extends React.Component {
           total_pages: data.total_pages,
           next_page: data.next_page,
           loading: false,
+        })
+      })
+    fetch('/api/authenticated')
+      .then(handleErrors)
+      .then(data => {
+        this.setState({
+          session_user: data.username,
         })
       })
   }
@@ -45,9 +53,9 @@ class Home extends React.Component {
   }
 
   render () {
-    const { properties, next_page, loading } = this.state;
+    const { properties, next_page, loading, session_user } = this.state;
     return (
-      <Layout>
+      <Layout session_user={session_user}>
         <div className="container pt-4">
           <h4 className="mb-1">Top-rated places to stay</h4>
           <p className="text-secondary mb-3">Explore some of the best-reviewed stays in the world</p>

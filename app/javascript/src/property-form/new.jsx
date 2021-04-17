@@ -25,7 +25,7 @@ class New extends React.Component {
       bedrooms: '',
       beds: '',
       baths: '',
-      images: '',
+      images: ''
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -86,41 +86,65 @@ class New extends React.Component {
   handleSubmit = (event) => {
     if (event) { event.preventDefault(); }
     this.setState({
-      error: '',
+      error: null,
     });
 
     let formData = new FormData();
     let fileInputElement = document.getElementById('fileInput');
-    for (let i = 0; i < fileInputElement.files.length; i++) {
-      formData.append('property[images][]', fileInputElement.files[i]);
-    }
-    // Set other params in the form data.
-    formData.set('property[title]', this.state.title);
-    formData.set('property[description]', this.state.description);
-    formData.set('property[city]', this.state.city);
-    formData.set('property[country]', this.state.country);
-    formData.set('property[property_type]', this.state.property_type);
-    formData.set('property[price_per_night]', this.state.price_per_night);
-    formData.set('property[max_guests]', this.state.max_guests);
-    formData.set('property[bedrooms]', this.state.bedrooms);
-    formData.set('property[beds]', this.state.beds);
-    formData.set('property[baths]', this.state.baths);
-
-
-    fetch('/api/properties', safeCredentialsForm({
-      method: 'POST',
-      body: formData,
-    })).then(handleErrors)
-      .then(data => {
-        if (data.property) {
-          window.location = '/property/' + data.property.id;
+    if (this.state.id || fileInputElement.files.length) {
+      if (fileInputElement.files.length) {
+        for (let i = 0; i < fileInputElement.files.length; i++) {
+          formData.append('property[images][]', fileInputElement.files[i]);
         }
-      })
-      .catch(error => {
-        this.setState({
-          error: 'Could not create property.',
+      }
+      // Set other params in the form data.
+      formData.set('property[title]', this.state.title);
+      formData.set('property[description]', this.state.description);
+      formData.set('property[city]', this.state.city);
+      formData.set('property[country]', this.state.country);
+      formData.set('property[property_type]', this.state.property_type);
+      formData.set('property[price_per_night]', this.state.price_per_night);
+      formData.set('property[max_guests]', this.state.max_guests);
+      formData.set('property[bedrooms]', this.state.bedrooms);
+      formData.set('property[beds]', this.state.beds);
+      formData.set('property[baths]', this.state.baths);
+
+      if (this.state.id) {
+        fetch(`/api/properties/${this.state.id}`, safeCredentialsForm({
+          method: 'PUT',
+          body: formData,
+        })).then(handleErrors)
+        .then(data => {
+          if (data.property) {
+            window.location = '/property/' + data.property.id;
+          }
         })
+        .catch(error => {
+          this.setState({
+            error: 'Could not update property.',
+          })
+        })
+      } else {
+        fetch('/api/properties', safeCredentialsForm({
+          method: 'POST',
+          body: formData,
+        })).then(handleErrors)
+        .then(data => {
+          if (data.property) {
+            window.location = '/property/' + data.property.id;
+          }
+        })
+        .catch(error => {
+          this.setState({
+            error: 'Could not create property.',
+          })
+        })
+      }
+    } else {
+      this.setState({
+        error: 'Image is required.',
       })
+    }
   }
 
   render () {
@@ -175,6 +199,11 @@ console.log(property_type);
                 <div className="col-12 my-4">
                   <input type="submit" className="btn btn-primary" value="Submit" />
                 </div>
+                { this.state.error &&
+                  <div className="col-12" style={{color: 'red'}}>
+                    {this.state.error}
+                  </div>
+                }
               </form>
             </div>
           </div>
@@ -227,6 +256,11 @@ console.log(property_type);
               <div className="col-12 my-4">
                 <input type="submit" className="btn btn-success" value="Submit" />
               </div>
+              { this.state.error &&
+                <div className="col-12" style={{color: 'red'}}>
+                  {this.state.error}
+                </div>
+              }
             </form>
           </div>
         </div>

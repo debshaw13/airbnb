@@ -15,4 +15,16 @@ class Property < ApplicationRecord
   validates :beds, presence: true, numericality: { only_integer: true, less_than: 20 }
   validates :baths, presence: true, numericality: { only_integer: true, less_than: 20 }
   validates :user, presence: true
+
+  before_save :add_image_url
+
+  private
+
+  def add_image_url
+    if self.images.any?
+      self.image_url = "https://airbnb-image-clone.s3.amazonaws.com/" + self.images.last.key
+    else
+      errors.add(:images, "image is required")
+    end
+  end
 end

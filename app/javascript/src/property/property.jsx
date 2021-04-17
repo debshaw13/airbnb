@@ -82,7 +82,7 @@ class Property extends React.Component {
             </div>
             { session_user === property.user.username && 
               <div className="col-12">              
-                <HostBookings />    
+                <HostBookings propertyId={id} />    
               </div>
             }
           </div>

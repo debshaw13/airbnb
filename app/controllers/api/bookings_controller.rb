@@ -17,6 +17,13 @@ module Api
       end
     end
 
+    def show
+      @booking = Booking.find(params[:id])
+      return render json: { error: 'not_found' }, status: :not_found if !@booking
+
+      render 'api/bookings/show', status: :ok
+    end
+
     private
 
     def booking_params

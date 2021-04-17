@@ -19,11 +19,11 @@ module Api
       return render json: { error: 'user not logged in' }, status: :unauthorized if !session
 
       @property = session.user.properties.create(property_params)
-        if @property.save
-          render 'api/properties/show', status: :created
-        else 
-          render json: { success: false }, status: :bad_request
-        end
+      if @property.save
+        render 'api/properties/show', status: :created
+      else 
+        render json: { success: false }, status: :bad_request
+      end
     end
 
     def update
@@ -31,12 +31,14 @@ module Api
       session = Session.find_by(token: token)
       return render json: { error: 'user not logged in' }, status: :unauthorized if !session
       
-      @property = session.user.properties.update(property_params)
-        if @property.save
-          render 'api/properties/show', status: :created
-        else 
-          render json: { success: false }, status: :bad_request
-        end
+      @property =  session.user.properties.find(params[:id])
+      return render json: { error: 'cannot find property' }, status: :not_found if !@property
+
+      if @property.update(property_params)
+        render 'api/properties/show', status: :created
+      else 
+        render json: { success: false }, status: :bad_request
+      end
     end
 
     def bookings
