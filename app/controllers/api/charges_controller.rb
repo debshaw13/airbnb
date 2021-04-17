@@ -56,23 +56,16 @@ module Api
         )
       rescue JSON::ParserError => e
         # Invalid payload
-        puts e.message
-        puts "invalid payload"
         return head :bad_request
       rescue Stripe::SignatureVerificationError => e
         # Invalid signature
-        puts e.message
-        puts "invalid signature"
         return head :bad_request
       end
 
       # Handle the checkout.session.completed event
       if event['type'] == 'checkout.session.completed'
-        puts "event"
-        puts event
         session = event['data']['object']
-        puts "session"
-        puts session
+
         # Fulfill the purchase, mark related charge as complete
         charge = Charge.find_by(checkout_session_id: session.id)
         return head :bad_request if !charge
